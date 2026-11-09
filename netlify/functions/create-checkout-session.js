@@ -31,7 +31,9 @@ exports.handler = async (event) => {
     .from("inventory")
     .select("*")
     .in("id", ids)
-    .eq("sold", false);
+    .eq("sold", false)
+    .eq('listed', true)
+    .gt('local_price', 0);
 
   if (error) {
     return { statusCode: 500, body: error.message };
@@ -48,7 +50,7 @@ exports.handler = async (event) => {
     price_data: {
       currency: "cad",
       product_data: { name: item.title },
-      unit_amount: Math.round(Number(item.price) * 100),
+      unit_amount: Math.round(Number(item.local_price) * 100),
     },
     quantity: 1,
   }));
